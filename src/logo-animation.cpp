@@ -1,13 +1,23 @@
 #include <iostream>
+#include <fstream>
+#include <string>
 using namespace std;
 
 #define NEWLINE        "\n"
-#define BORDER         "--------------"
-#define SYLVER_STUDIOS "Sylver Studios"
 
 int main ()
 {
-	cout << NEWLINE << BORDER << NEWLINE << SYLVER_STUDIOS << NEWLINE << BORDER << NEWLINE << endl;
+	string filecontents, line;
+	ifstream myfile ("text/logo.txt");
+	if (myfile.is_open()) {
+    while(getline(myfile, line)) {
+			filecontents += line + '\n';
+		}
+		myfile.close();
+	  cout << NEWLINE << filecontents << endl;
+	} else {
+		cout << "Unable to open file";
+	}
 	return 0;
 }
 
