@@ -1,12 +1,20 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <ncurses.h>
 using namespace std;
 
 #define NEWLINE        "\n"
 
+void printFromFile();
+
 int main ()
 {
+	printFromFile();
+	return 0;
+}
+
+void printFromFile() {
 	string filecontents, line;
 	ifstream myfile ("text/logo.txt");
 	if (myfile.is_open()) {
@@ -18,6 +26,5 @@ int main ()
 	} else {
 		cout << "Unable to open file";
 	}
-	return 0;
 }
 
