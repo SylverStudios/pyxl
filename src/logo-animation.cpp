@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <time.h>
 #include <stdlib.h>
 #include <ncurses.h>
 using namespace std;
@@ -9,6 +10,7 @@ using namespace std;
 #define NEWLINE        "\n"
 
 void fileToStringVector(vector<string> *);
+void wait(int);
 
 int main ()
 {
@@ -32,9 +34,17 @@ int main ()
     char character = line.at(colCoord);
     mvaddch(lineCoord, colCoord, character);
     refresh();
+    wait(20);
   }
 	endwin();			/* End curses mode		  */
 	return 0;
+}
+
+void wait ( int milliseconds )
+{
+  clock_t endwait;
+  endwait = clock () + milliseconds * CLOCKS_PER_SEC / 1000 ;
+  while (clock() < endwait) {}
 }
 
 void fileToStringVector(vector<string> * filecontents) {
