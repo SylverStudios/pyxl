@@ -10,6 +10,8 @@ CC       = g++
 
 # linking command - links .o objects into sylver executable
 LINKER   = g++ -o
+# linking flags
+LFLAGS   = -lncurses
 
 # source, objects, and bin directory names
 SRCDIR   = src
@@ -26,7 +28,8 @@ OBJECTS  := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 # linking rule
 $(BINDIR)/$(TARGET): $(OBJECTS)
 	@echo "Linking "$<" to create executable "$@
-	@$(LINKER) $@ $(OBJECTS)
+	@echo $(LINKER) $@ $(OBJECTS) $(LFLAGS)
+	@$(LINKER) $@ $(OBJECTS) $(LFLAGS)
 	@echo "Linking complete."
 
 # compilation rule
