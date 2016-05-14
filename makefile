@@ -6,10 +6,10 @@
 TARGET   = sylver
 
 # compilation command - compiles .cpp sources into .o objects
-CC       = g++
+CC       = g++ -g
 
 # linking command - links .o objects into sylver executable
-LINKER   = g++ -o
+LINKER   = g++ -g -o
 # linking flags
 LFLAGS   = -lncurses
 
@@ -45,5 +45,5 @@ $(ARTIFACTDIRS):
 	@test -d $(BINDIR) || mkdir $(BINDIR)
 
 # clean all artifacts (objects and executable)
-clean: 
+clean:
 	rm -rf $(OBJDIR) $(BINDIR)
