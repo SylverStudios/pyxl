@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <stdlib.h>
 #include <ncurses.h>
 using namespace std;
 
@@ -11,16 +12,27 @@ void fileToStringVector(vector<string> *);
 
 int main ()
 {
+  // get contents of text file
   vector<string> filecontents;
 	fileToStringVector(&filecontents);
-	WINDOW * stdscr = initscr();			/* Start curses mode 		  */
-  for (int i = 0; i < filecontents.size() ; i++) {
-    printw(filecontents.at(i).c_str());
-    printw(NEWLINE);
-  }
-	refresh();			/* Print it on to the real screen */
 
-	getch();			/* Wait for user input */
+  // initialize values needed for random character printing
+  int numLines = filecontents.size();
+  int numCols = filecontents.at(0).size(); // FIXME assumes all lines are same length (and 1 exists)
+
+  // initialize curses screen
+	initscr();
+
+  // loop through characters in text file, print them to screen at appropriate coordinates
+  srand (time(NULL));
+  for (;;) {
+    int lineCoord = rand() % numLines;
+    int colCoord = rand() % numCols;
+    string line = filecontents.at(lineCoord);
+    char character = line.at(colCoord);
+    mvaddch(lineCoord, colCoord, character);
+    refresh();
+  }
 	endwin();			/* End curses mode		  */
 	return 0;
 }
