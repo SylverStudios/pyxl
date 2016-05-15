@@ -52,10 +52,10 @@ int main ()
   noecho();
 
   // perform startup animations
-  animate_printRandomNonSpaces(nonSpaceCoords, filecontents, numCols);
-  animate_printRandomSpaces(nonSpaceCoords, filecontents, numCols);
-  animate_wave(filecontents, numLines, numCols, false);
-  animate_wave(filecontents, numLines, numCols, true);
+  AnimationEngine::animate_printRandomNonSpaces(nonSpaceCoords, filecontents, numCols);
+  AnimationEngine::animate_printRandomSpaces(nonSpaceCoords, filecontents, numCols);
+  AnimationEngine::animate_wave(filecontents, numLines, numCols, false);
+  AnimationEngine::animate_wave(filecontents, numLines, numCols, true);
 
   // await user instruction for further animations
   for (;;) {
@@ -64,7 +64,7 @@ int main ()
       break;
     }
     if (c == 'w') {
-      animate_wave(filecontents, numLines, numCols, true);
+      AnimationEngine::animate_wave(filecontents, numLines, numCols, true);
     }
   }
 

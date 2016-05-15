@@ -8,18 +8,23 @@
 #include <math.h>
 #include <ncurses.h>
 
-void animate_printRandomNonSpaces(
-  std::vector<int> nonSpaceCoords,
-  std::vector<std::string> filecontents,
-  int numCols
-);
+class AnimationEngine
+{
+public:
+  static void animate_printRandomNonSpaces(
+    std::vector<int> nonSpaceCoords,
+    std::vector<std::string> filecontents,
+    int numCols
+  );
+  static void animate_printRandomSpaces(
+    std::vector<int> nonSpaceCoords,
+    std::vector<std::string> filecontents,
+    int numCols
+  );
+  static void animate_wave(std::vector<std::string> filecontents, int numLines, int numCols, bool stayUp);
+};
 
-void animate_printRandomSpaces(
-  std::vector<int> nonSpaceCoords,
-  std::vector<std::string> filecontents,
-  int numCols
-);
 
-void animate_wave(std::vector<std::string> filecontents, int numLines, int numCols, bool stayUp);
+
 
 #endif

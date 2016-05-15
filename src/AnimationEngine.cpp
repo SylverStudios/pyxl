@@ -8,7 +8,7 @@ void wait ( int milliseconds )
   while (clock() < endwait) {}
 }
 
-void animate_printRandomNonSpaces(
+void AnimationEngine::animate_printRandomNonSpaces(
   vector<int> nonSpaceCoords,
   vector<string> filecontents,
   int numCols
@@ -26,7 +26,7 @@ void animate_printRandomNonSpaces(
   }
 }
 
-void animate_printRandomSpaces(
+void AnimationEngine::animate_printRandomSpaces(
   vector<int> nonSpaceCoords,
   vector<string> filecontents,
   int numCols
@@ -42,7 +42,7 @@ void animate_printRandomSpaces(
   }
 }
 
-void animate_wave(vector<string> filecontents, int numLines, int numCols, bool stayUp) {
+void AnimationEngine::animate_wave(vector<string> filecontents, int numLines, int numCols, bool stayUp) {
   // wave (visible characters are the water) from left to right
   vector<int> waveColHeights;
   waveColHeights.assign(numCols, 0);
