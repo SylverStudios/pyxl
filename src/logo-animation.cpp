@@ -139,12 +139,24 @@ int main ()
   // initialize curses screen
 	initscr();
   curs_set(0);
+  noecho();
 
   // perform startup animations
-  animate_printRandomNonSpaces(nonSpaceCoords, filecontents, numCols);
-  animate_printRandomSpaces(nonSpaceCoords, filecontents, numCols);
-  animate_wave(filecontents, numLines, numCols, false);
+  // animate_printRandomNonSpaces(nonSpaceCoords, filecontents, numCols);
+  // animate_printRandomSpaces(nonSpaceCoords, filecontents, numCols);
+  // animate_wave(filecontents, numLines, numCols, false);
   animate_wave(filecontents, numLines, numCols, true);
+
+  // await user instruction for further animations
+  for (;;) {
+    char c = getch();
+    if (c == 'q') {
+      break;
+    }
+    if (c == 'w') {
+      animate_wave(filecontents, numLines, numCols, true);
+    }
+  }
 
   // end curses window
 	endwin();
