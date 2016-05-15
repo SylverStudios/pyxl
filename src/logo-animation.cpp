@@ -75,6 +75,7 @@ void animate_wave(vector<string> filecontents, int numLines, int numCols, bool s
   int waveWidth = numCols; // TODO make this adjustable
   int currentTick = 0; // front of the wave
   bool waveFinished = false;
+  float speed = 14;
   while (!waveFinished) {
     currentTick++;
     int waveBack = currentTick - waveWidth;
@@ -101,7 +102,8 @@ void animate_wave(vector<string> filecontents, int numLines, int numCols, bool s
       }
     }
     refresh();
-    wait(14);
+    speed -= 0.05;
+    wait((int) speed);
     bool anyColHasHeight = false;
     bool allColsHaveHeight = true;
     for ( int c = 0 ; c < waveColHeights.size() ; c++ ) {
@@ -142,9 +144,9 @@ int main ()
   noecho();
 
   // perform startup animations
-  // animate_printRandomNonSpaces(nonSpaceCoords, filecontents, numCols);
-  // animate_printRandomSpaces(nonSpaceCoords, filecontents, numCols);
-  // animate_wave(filecontents, numLines, numCols, false);
+  animate_printRandomNonSpaces(nonSpaceCoords, filecontents, numCols);
+  animate_printRandomSpaces(nonSpaceCoords, filecontents, numCols);
+  animate_wave(filecontents, numLines, numCols, false);
   animate_wave(filecontents, numLines, numCols, true);
 
   // await user instruction for further animations
