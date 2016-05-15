@@ -22,24 +22,26 @@ int main ()
   // initialize values needed for random character printing
   int numLines = filecontents.size();
   int numCols = filecontents.at(0).size(); // FIXME assumes all lines are same length (and 1 exists)
-  vector<int> unprintedCoords;
+  vector<int> nonSpaceCoords;
   for( int x = 0 ; x < numLines ; x++ ) {
     for( int y = 0 ; y < numCols ; y++ ) {
       if (filecontents.at(x).at(y) != ' ') {
-        unprintedCoords.push_back(x * numCols + y);
+        nonSpaceCoords.push_back(x * numCols + y);
       }
     }
   }
-  random_shuffle(unprintedCoords.begin(), unprintedCoords.end());
+  random_shuffle(nonSpaceCoords.begin(), nonSpaceCoords.end());
 
   // initialize curses screen
 	initscr();
   curs_set(0);
 
-  // loop through characters in text file, print them to screen at appropriate coordinates
+  // initialize random seed
   srand (time(NULL));
-  for ( int i = 0 ; i < unprintedCoords.size() ; i++ ) {
-    int coord = unprintedCoords.at(i);
+
+  // loop through non-space coords and print them at appropriate coordinates
+  for ( int i = 0 ; i < nonSpaceCoords.size() ; i++ ) {
+    int coord = nonSpaceCoords.at(i);
     int lineCoord = coord / numCols;
     int colCoord = coord % numCols;
     string line = filecontents.at(lineCoord);
@@ -48,9 +50,21 @@ int main ()
     refresh();
     wait(10);
   }
-  getch();
-	endwin();			/* End curses mode		  */
-	return 0;
+
+  // loop through non-space coords and print a space there
+  for ( int i = 0 ; i < nonSpaceCoords.size() ; i++ ) {
+    int coord = nonSpaceCoords.at(i);
+    int lineCoord = coord / numCols;
+    int colCoord = coord % numCols;
+    mvaddch(lineCoord, colCoord, ' ');
+    refresh();
+    wait(10);
+  }
+
+  // end curses window
+	endwin();
+
+  return 0;
 }
 
 void wait ( int milliseconds )
