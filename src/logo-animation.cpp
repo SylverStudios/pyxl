@@ -22,10 +22,13 @@ int main ()
   // initialize values needed for random character printing
   int numLines = filecontents.size();
   int numCols = filecontents.at(0).size(); // FIXME assumes all lines are same length (and 1 exists)
-  int totalCoords = numLines * numCols;
   vector<int> unprintedCoords;
-  for( int i = 0 ; i < totalCoords ; i++ ) {
-    unprintedCoords.push_back(i);
+  for( int x = 0 ; x < numLines ; x++ ) {
+    for( int y = 0 ; y < numCols ; y++ ) {
+      if (filecontents.at(x).at(y) != ' ') {
+        unprintedCoords.push_back(x * numCols + y);
+      }
+    }
   }
   random_shuffle(unprintedCoords.begin(), unprintedCoords.end());
 
@@ -35,7 +38,7 @@ int main ()
 
   // loop through characters in text file, print them to screen at appropriate coordinates
   srand (time(NULL));
-  for ( int i = 0 ; i < totalCoords ; i++ ) {
+  for ( int i = 0 ; i < unprintedCoords.size() ; i++ ) {
     int coord = unprintedCoords.at(i);
     int lineCoord = coord / numCols;
     int colCoord = coord % numCols;
