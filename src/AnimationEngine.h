@@ -3,28 +3,25 @@
 
 #define PI 3.14159265
 
-#include <vector>
-#include <string>
 #include <math.h>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <time.h>
+#include <stdlib.h>
 #include <ncurses.h>
-
 class AnimationEngine
 {
+  int numLines;
+  int numCols;
+  std::vector<std::string> characters;
+  std::vector<int> nonSpaceCoords;
 public:
-  static void animate_printRandomNonSpaces(
-    std::vector<int> nonSpaceCoords,
-    std::vector<std::string> filecontents,
-    int numCols
-  );
-  static void animate_printRandomSpaces(
-    std::vector<int> nonSpaceCoords,
-    std::vector<std::string> filecontents,
-    int numCols
-  );
-  static void animate_wave(std::vector<std::string> filecontents, int numLines, int numCols, bool stayUp);
+  AnimationEngine(std::vector<std::string> characters);
+  void animate_printRandomNonSpaces();
+  void animate_printRandomSpaces();
+  void animate_wave(bool stayUp);
 };
-
-
-
 
 #endif

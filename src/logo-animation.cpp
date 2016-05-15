@@ -33,29 +33,19 @@ int main ()
   vector<string> filecontents;
 	fileToStringVector(&filecontents);
 
-  // initialize values needed for random character printing
-  int numLines = filecontents.size();
-  int numCols = filecontents.at(0).size(); // FIXME assumes all lines are same length (and 1 exists)
-  vector<int> nonSpaceCoords;
-  for( int l = 0 ; l < numLines ; l++ ) {
-    for( int c = 0 ; c < numCols ; c++ ) {
-      if (filecontents.at(l).at(c) != ' ') {
-        nonSpaceCoords.push_back(l * numCols + c);
-      }
-    }
-  }
-  random_shuffle(nonSpaceCoords.begin(), nonSpaceCoords.end());
-
   // initialize curses screen
 	initscr();
   curs_set(0);
   noecho();
 
+  // initialize AnimationEngine
+  AnimationEngine engine (filecontents);
+
   // perform startup animations
-  AnimationEngine::animate_printRandomNonSpaces(nonSpaceCoords, filecontents, numCols);
-  AnimationEngine::animate_printRandomSpaces(nonSpaceCoords, filecontents, numCols);
-  AnimationEngine::animate_wave(filecontents, numLines, numCols, false);
-  AnimationEngine::animate_wave(filecontents, numLines, numCols, true);
+  engine.animate_printRandomNonSpaces();
+  engine.animate_printRandomSpaces();
+  engine.animate_wave(false);
+  engine.animate_wave(true);
 
   // await user instruction for further animations
   for (;;) {
@@ -64,7 +54,7 @@ int main ()
       break;
     }
     if (c == 'w') {
-      AnimationEngine::animate_wave(filecontents, numLines, numCols, true);
+      engine.animate_wave(true);
     }
   }
 

@@ -8,17 +8,28 @@ void wait ( int milliseconds )
   while (clock() < endwait) {}
 }
 
-void AnimationEngine::animate_printRandomNonSpaces(
-  vector<int> nonSpaceCoords,
-  vector<string> filecontents,
-  int numCols
- ) {
+AnimationEngine::AnimationEngine(vector<string> characters) {
+  // initialize values needed for random character printing
+  this->characters = characters;
+  numLines = characters.size();
+  numCols = characters.at(0).size(); // FIXME assumes all lines are same length (and 1 exists)
+  for( int l = 0 ; l < numLines ; l++ ) {
+    for( int c = 0 ; c < numCols ; c++ ) {
+      if (characters.at(l).at(c) != ' ') {
+        nonSpaceCoords.push_back(l * numCols + c);
+      }
+    }
+  }
+  random_shuffle(nonSpaceCoords.begin(), nonSpaceCoords.end());
+}
+
+void AnimationEngine::animate_printRandomNonSpaces() {
   // loop through non-space coords and print them at appropriate coordinates
   for ( int i = 0 ; i < nonSpaceCoords.size() ; i++ ) {
     int coord = nonSpaceCoords.at(i);
     int lineCoord = coord / numCols;
     int colCoord = coord % numCols;
-    string line = filecontents.at(lineCoord);
+    string line = characters.at(lineCoord);
     char character = line.at(colCoord);
     mvaddch(lineCoord, colCoord, character);
     refresh();
@@ -26,11 +37,7 @@ void AnimationEngine::animate_printRandomNonSpaces(
   }
 }
 
-void AnimationEngine::animate_printRandomSpaces(
-  vector<int> nonSpaceCoords,
-  vector<string> filecontents,
-  int numCols
-) {
+void AnimationEngine::animate_printRandomSpaces() {
   // // loop through non-space coords and print a space there
   for ( int i = 0 ; i < nonSpaceCoords.size() ; i++ ) {
     int coord = nonSpaceCoords.at(i);
@@ -42,7 +49,7 @@ void AnimationEngine::animate_printRandomSpaces(
   }
 }
 
-void AnimationEngine::animate_wave(vector<string> filecontents, int numLines, int numCols, bool stayUp) {
+void AnimationEngine::animate_wave(bool stayUp) {
   // wave (visible characters are the water) from left to right
   vector<int> waveColHeights;
   waveColHeights.assign(numCols, 0);
@@ -69,7 +76,7 @@ void AnimationEngine::animate_wave(vector<string> filecontents, int numLines, in
     for ( int c = 0 ;  c < waveColHeights.size() ; c++ ) {
       for ( int l = 0 ; l < numLines ; l++ ) {
         if ( waveColHeights[c] >= numLines - l ) {
-          mvaddch(l, c, filecontents.at(l).at(c));
+          mvaddch(l, c, characters.at(l).at(c));
         } else {
           mvaddch(l, c, ' ');
         }
