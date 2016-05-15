@@ -68,7 +68,7 @@ void animate_printRandomSpaces(
   }
 }
 
-void animate_wave(vector<string> filecontents, int numLines, int numCols) {
+void animate_wave(vector<string> filecontents, int numLines, int numCols, bool stayUp) {
   // wave (visible characters are the water) from left to right
   vector<int> waveColHeights;
   waveColHeights.assign(numCols, 0);
@@ -79,8 +79,11 @@ void animate_wave(vector<string> filecontents, int numLines, int numCols) {
     currentTick++;
     int waveBack = currentTick - waveWidth;
     for ( int c = 0 ; c < waveColHeights.size() ; c++ ) {
+      if (stayUp && c < waveBack + waveWidth / 2) {
+        waveColHeights[c] = numLines;
+      }
       // must be in wave
-      if (currentTick < c || c < waveBack) {
+      else if (currentTick < c || c < waveBack) {
         waveColHeights[c] = 0;
       } else {
         int distanceFromBack = c - waveBack;
@@ -99,6 +102,18 @@ void animate_wave(vector<string> filecontents, int numLines, int numCols) {
     }
     refresh();
     wait(14);
+    bool anyColHasHeight = false;
+    bool allColsHaveHeight = true;
+    for ( int c = 0 ; c < waveColHeights.size() ; c++ ) {
+      if (waveColHeights[c] > 0) {
+        anyColHasHeight = true;
+      }
+      if (waveColHeights[c] != numLines) {
+        allColsHaveHeight = false;
+      }
+    }
+    waveFinished = currentTick > waveWidth &&
+     ((!stayUp && !anyColHasHeight) || (stayUp && allColsHaveHeight));
   }
 }
 
@@ -128,7 +143,8 @@ int main ()
   // perform startup animations
   animate_printRandomNonSpaces(nonSpaceCoords, filecontents, numCols);
   animate_printRandomSpaces(nonSpaceCoords, filecontents, numCols);
-  animate_wave(filecontents, numLines, numCols);
+  animate_wave(filecontents, numLines, numCols, false);
+  animate_wave(filecontents, numLines, numCols, true);
 
   // end curses window
 	endwin();
