@@ -12,33 +12,34 @@ using namespace std;
 #define NEWLINE        "\n"
 #define PI 3.14159265
 
-void fileToStringVector(vector<string> *);
-void wait(int);
+void fileToStringVector(vector<string> * filecontents) {
+  vector<string> lines;
+  string line;
+	ifstream myfile ("text/logo.txt");
+	if (myfile.is_open()) {
+    while(getline(myfile, line)) {
+      lines.push_back(line);
+		}
+		myfile.close();
+	} else {
+		cout << "Unable to open file";
+	}
+  *filecontents = lines;
+}
 
-int main ()
+void wait ( int milliseconds )
 {
-  // get contents of text file
-  vector<string> filecontents;
-	fileToStringVector(&filecontents);
+  clock_t endwait;
+  endwait = clock () + milliseconds * CLOCKS_PER_SEC / 1000 ;
+  while (clock() < endwait) {}
+}
 
-  // initialize values needed for random character printing
-  int numLines = filecontents.size();
-  int numCols = filecontents.at(0).size(); // FIXME assumes all lines are same length (and 1 exists)
-  vector<int> nonSpaceCoords;
-  for( int l = 0 ; l < numLines ; l++ ) {
-    for( int c = 0 ; c < numCols ; c++ ) {
-      if (filecontents.at(l).at(c) != ' ') {
-        nonSpaceCoords.push_back(l * numCols + c);
-      }
-    }
-  }
-  random_shuffle(nonSpaceCoords.begin(), nonSpaceCoords.end());
-
-  // initialize curses screen
-	initscr();
-  curs_set(0);
-
-  // // loop through non-space coords and print them at appropriate coordinates
+void animate_printRandomNonSpaces(
+  vector<int> nonSpaceCoords,
+  vector<string> filecontents,
+  int numCols
+ ) {
+  // loop through non-space coords and print them at appropriate coordinates
   for ( int i = 0 ; i < nonSpaceCoords.size() ; i++ ) {
     int coord = nonSpaceCoords.at(i);
     int lineCoord = coord / numCols;
@@ -49,7 +50,13 @@ int main ()
     refresh();
     wait(3);
   }
-  //
+}
+
+void animate_printRandomSpaces(
+  vector<int> nonSpaceCoords,
+  vector<string> filecontents,
+  int numCols
+) {
   // // loop through non-space coords and print a space there
   for ( int i = 0 ; i < nonSpaceCoords.size() ; i++ ) {
     int coord = nonSpaceCoords.at(i);
@@ -59,7 +66,9 @@ int main ()
     refresh();
     wait(3);
   }
+}
 
+void animate_wave(vector<string> filecontents, int numLines, int numCols) {
   // wave (visible characters are the water) from left to right
   vector<int> waveColHeights;
   waveColHeights.assign(numCols, 0);
@@ -91,31 +100,38 @@ int main ()
     refresh();
     wait(14);
   }
+}
+
+int main ()
+{
+  // get contents of text file
+  vector<string> filecontents;
+	fileToStringVector(&filecontents);
+
+  // initialize values needed for random character printing
+  int numLines = filecontents.size();
+  int numCols = filecontents.at(0).size(); // FIXME assumes all lines are same length (and 1 exists)
+  vector<int> nonSpaceCoords;
+  for( int l = 0 ; l < numLines ; l++ ) {
+    for( int c = 0 ; c < numCols ; c++ ) {
+      if (filecontents.at(l).at(c) != ' ') {
+        nonSpaceCoords.push_back(l * numCols + c);
+      }
+    }
+  }
+  random_shuffle(nonSpaceCoords.begin(), nonSpaceCoords.end());
+
+  // initialize curses screen
+	initscr();
+  curs_set(0);
+
+  // perform startup animations
+  animate_printRandomNonSpaces(nonSpaceCoords, filecontents, numCols);
+  animate_printRandomSpaces(nonSpaceCoords, filecontents, numCols);
+  animate_wave(filecontents, numLines, numCols);
 
   // end curses window
 	endwin();
 
   return 0;
-}
-
-void wait ( int milliseconds )
-{
-  clock_t endwait;
-  endwait = clock () + milliseconds * CLOCKS_PER_SEC / 1000 ;
-  while (clock() < endwait) {}
-}
-
-void fileToStringVector(vector<string> * filecontents) {
-  vector<string> lines;
-  string line;
-	ifstream myfile ("text/logo.txt");
-	if (myfile.is_open()) {
-    while(getline(myfile, line)) {
-      lines.push_back(line);
-		}
-		myfile.close();
-	} else {
-		cout << "Unable to open file";
-	}
-  *filecontents = lines;
 }
