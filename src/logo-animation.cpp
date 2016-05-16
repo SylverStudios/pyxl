@@ -8,6 +8,7 @@
 #include <ncurses.h>
 using namespace std;
 
+#include "Logging.h"
 #include "AnimationEngine.h"
 
 #define NEWLINE        "\n"
@@ -29,6 +30,7 @@ void fileToStringVector(vector<string> * filecontents) {
 
 int main ()
 {
+  logf("\n\n--------PROGRAM START--------");
   // get contents of text file
   vector<string> filecontents;
 	fileToStringVector(&filecontents);
@@ -37,26 +39,10 @@ int main ()
 	initscr();
   curs_set(0);
   noecho();
+  nodelay(stdscr, TRUE);
 
   // initialize AnimationEngine
   AnimationEngine engine (filecontents);
-
-  // perform startup animations
-  engine.animate_printRandomNonSpaces();
-  engine.animate_printRandomSpaces();
-  engine.animate_wave(false);
-  engine.animate_wave(true);
-
-  // await user instruction for further animations
-  for (;;) {
-    char c = getch();
-    if (c == 'q') {
-      break;
-    }
-    if (c == 'w') {
-      engine.animate_wave(true);
-    }
-  }
 
   // end curses window
 	endwin();

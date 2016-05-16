@@ -1,4 +1,6 @@
 #include "AnimationEngine.h"
+#include "Animation.h"
+#include "Logging.h"
 using namespace std;
 
 void wait ( int milliseconds )
@@ -21,7 +23,64 @@ AnimationEngine::AnimationEngine(vector<string> characters) {
     }
   }
   random_shuffle(nonSpaceCoords.begin(), nonSpaceCoords.end());
+
+  this->animate_printRandomNonSpaces();
+  this->animate_printRandomSpaces();
+  this->animate_wave(false);
+  this->animate_wave(true);
+
+  this->mainLoop();
 }
+
+void AnimationEngine::mainLoop() {
+  vector<Animation> activeAnimations;
+  bool shouldExit = false;
+  while (!shouldExit) {
+    long currentTime = clock();
+    // check for user input
+    char c = getch();
+    switch(c) {
+      case ERR:
+        break;
+      case 'q':
+        shouldExit = true;
+        break;
+      case 'w':
+        activeAnimations.push_back(Animation(numLines, numCols, currentTime, 3000));
+    }
+    // step through each active animation and build a canvas
+    vector<vector<PixelState> > canvas (numLines, vector<PixelState>(numCols, IMPARTIAL));
+    for ( int a = 0; a < activeAnimations.size() ; a++ ) {
+      vector<vector<PixelState> >* animationCanvas = activeAnimations[a].computeFrame(currentTime);
+      if ( animationCanvas == nullptr ) {
+        logf("mainloop, erasing index: " + to_string(a));
+        activeAnimations.erase (activeAnimations.begin() + a);
+        a--;
+        continue;
+      }
+      for ( int l = 0; l < numLines ; l++) {
+        for ( int c = 0; c < numCols ; c++) {
+          PixelState pixelState = animationCanvas->at(l)[c];
+          if (pixelState != IMPARTIAL) {
+            canvas[l][c] = pixelState;
+          }
+        }
+      }
+    }
+    // print current canvas
+    for ( int l = 0; l < numLines ; l++) {
+      for ( int c = 0; c < numCols ; c++) {
+        PixelState pixelState = canvas[l][c];
+        if (pixelState == ON) {
+          mvaddch(l, c, characters[l][c]);
+        } else if (pixelState == OFF) {
+          mvaddch(l, c, ' ');
+        }
+      }
+    }
+    wait(20);
+  }
+};
 
 void AnimationEngine::animate_printRandomNonSpaces() {
   // loop through non-space coords and print them at appropriate coordinates

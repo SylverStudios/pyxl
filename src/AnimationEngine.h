@@ -17,6 +17,7 @@ class AnimationEngine
   int numCols;
   std::vector<std::string> characters;
   std::vector<int> nonSpaceCoords;
+  void mainLoop();
 public:
   AnimationEngine(std::vector<std::string> characters);
   void animate_printRandomNonSpaces();
