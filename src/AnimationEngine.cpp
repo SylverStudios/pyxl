@@ -39,15 +39,20 @@ void AnimationEngine::mainLoop() {
     switch(c) {
       case ERR:
         break;
-      case 'q':
+      case 'q': // [q]uit
         shouldExit = true;
         break;
-      case 'r':
+      case 'r': // [r]ipple
         activeAnimations.push_back(new RippleAnimation(numLines, numCols, currentTime, 3000));
         break;
-      case 'd':
+      case 'o': // fade [o]ut
         activeAnimations.push_back(
           new DissolveAnimation(numLines, numCols, currentTime, 2000, characters, false)
+        );
+        break;
+      case 'i': // fade [i]n
+        activeAnimations.push_back(
+          new DissolveAnimation(numLines, numCols, currentTime, 2000, characters, true)
         );
         break;
     }
