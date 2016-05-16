@@ -1,6 +1,4 @@
 #include "AnimationEngine.h"
-#include "Animation.h"
-#include "Logging.h"
 using namespace std;
 
 void wait ( int milliseconds )
@@ -33,7 +31,7 @@ AnimationEngine::AnimationEngine(vector<string> characters) {
 }
 
 void AnimationEngine::mainLoop() {
-  vector<Animation> activeAnimations;
+  vector<Animation*> activeAnimations;
   bool shouldExit = false;
   while (!shouldExit) {
     long currentTime = clock();
@@ -45,13 +43,13 @@ void AnimationEngine::mainLoop() {
       case 'q':
         shouldExit = true;
         break;
-      case 'w':
-        activeAnimations.push_back(Animation(numLines, numCols, currentTime, 3000));
+      case 'r':
+        activeAnimations.push_back(new RippleAnimation(numLines, numCols, currentTime, 3000));
     }
     // step through each active animation and build a canvas
     vector<vector<PixelState> > canvas (numLines, vector<PixelState>(numCols, IMPARTIAL));
     for ( int a = 0; a < activeAnimations.size() ; a++ ) {
-      vector<vector<PixelState> >* animationCanvas = activeAnimations[a].computeFrame(currentTime);
+      vector<vector<PixelState> >* animationCanvas = activeAnimations[a]->computeFrame(currentTime);
       if ( animationCanvas == nullptr ) {
         logf("mainloop, erasing index: " + to_string(a));
         activeAnimations.erase (activeAnimations.begin() + a);

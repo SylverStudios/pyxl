@@ -11,17 +11,20 @@
 #include <stdlib.h>
 #include <ncurses.h>
 
+#include "Logging.h"
+
 enum PixelState { IMPARTIAL, ON, OFF };
 
 class Animation
 {
+protected:
   int numLines;
   int numCols;
   long startTime;
   long duration;
 public:
   Animation(int numLines, int numCols, long startTime, long duration);
-  std::vector<std::vector<PixelState> >* computeFrame(long currentTime);
+  virtual std::vector<std::vector<PixelState> >* computeFrame(long currentTime) =0;
 };
 
 #endif

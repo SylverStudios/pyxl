@@ -11,6 +11,11 @@
 #include <time.h>
 #include <stdlib.h>
 #include <ncurses.h>
+
+#include "Animation.h"
+#include "RippleAnimation.h"
+#include "Logging.h"
+
 class AnimationEngine
 {
   int numLines;
