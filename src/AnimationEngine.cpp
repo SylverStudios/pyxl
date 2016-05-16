@@ -22,8 +22,7 @@ AnimationEngine::AnimationEngine(vector<string> characters) {
   }
   random_shuffle(nonSpaceCoords.begin(), nonSpaceCoords.end());
 
-  this->animate_printRandomNonSpaces();
-  this->animate_printRandomSpaces();
+  // this->animate_printRandomSpaces();
   this->animate_wave(false);
   this->animate_wave(true);
 
@@ -45,6 +44,12 @@ void AnimationEngine::mainLoop() {
         break;
       case 'r':
         activeAnimations.push_back(new RippleAnimation(numLines, numCols, currentTime, 3000));
+        break;
+      case 'd':
+        activeAnimations.push_back(
+          new DissolveAnimation(numLines, numCols, currentTime, 2000, characters, false)
+        );
+        break;
     }
     // step through each active animation and build a canvas
     vector<vector<PixelState> > canvas (numLines, vector<PixelState>(numCols, IMPARTIAL));
@@ -76,23 +81,9 @@ void AnimationEngine::mainLoop() {
         }
       }
     }
-    wait(20);
-  }
-};
-
-void AnimationEngine::animate_printRandomNonSpaces() {
-  // loop through non-space coords and print them at appropriate coordinates
-  for ( int i = 0 ; i < nonSpaceCoords.size() ; i++ ) {
-    int coord = nonSpaceCoords.at(i);
-    int lineCoord = coord / numCols;
-    int colCoord = coord % numCols;
-    string line = characters.at(lineCoord);
-    char character = line.at(colCoord);
-    mvaddch(lineCoord, colCoord, character);
-    refresh();
     wait(3);
   }
-}
+};
 
 void AnimationEngine::animate_printRandomSpaces() {
   // // loop through non-space coords and print a space there

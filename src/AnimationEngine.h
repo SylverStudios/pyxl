@@ -14,6 +14,7 @@
 
 #include "Animation.h"
 #include "RippleAnimation.h"
+#include "DissolveAnimation.h"
 #include "Logging.h"
 
 class AnimationEngine
