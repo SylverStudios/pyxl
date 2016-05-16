@@ -47,16 +47,20 @@ DissolveAnimation* DissolveAnimation::create(
  * Chooses random non-space characters to print / erase
  */
 vector<vector<PixelState> >* DissolveAnimation::computeFrame(long currentTime) {
+  logf("Dissolve::computeFrame");
+  logf("\tcurrentTime: " + to_string(currentTime));
   int currentFrame = (currentTime - startTime) / frameDuration;
-  if (currentFrame > maxFrames) {
+  if (currentFrame >= maxFrames) {
     return nullptr;
   }
 
   vector<vector<PixelState> >* canvasState = getBlankFrameState();
   // the one new showing pixel
+
   int coord = nonSpaceCoords.at(currentFrame);
   int lineCoord = coord / numCols;
   int colCoord = coord % numCols;
+  logf("\tcoordinates: [" + to_string(lineCoord) + ", " + to_string(colCoord) + "]");
   canvasState->at(lineCoord)[colCoord] = fadeIn ? ON : OFF;
   return canvasState;
 }
