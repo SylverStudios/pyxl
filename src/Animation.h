@@ -18,12 +18,22 @@ enum PixelState { IMPARTIAL, ON, OFF };
 class Animation
 {
 protected:
-  int numLines;
-  int numCols;
+  long numLines;
+  long numCols;
   long startTime;
   long duration;
+  long maxFrames;
+  long frameDuration;
+
+  std::vector<std::vector<PixelState> >* getBlankFrameState();
 public:
-  Animation(int numLines, int numCols, long startTime, long duration);
+  Animation(
+    long numLines,
+    long numCols,
+    long startTime,
+    long duration,
+    long maxFrames
+  );
   virtual std::vector<std::vector<PixelState> >* computeFrame(long currentTime) =0;
 };
 

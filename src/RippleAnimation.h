@@ -6,8 +6,9 @@
 class RippleAnimation : public Animation
 {
 public:
-  RippleAnimation(int numLines, int numCols, long startTime, long duration):
-    Animation(numLines, numCols, startTime, duration) {};
+  static RippleAnimation* create(long numLines, long numCols, long startTime, long duration);
+  RippleAnimation(long numLines, long numCols, long startTime, long duration, long maxFrames)
+    : Animation(numLines, numCols, startTime, duration, maxFrames) {};
   std::vector<std::vector<PixelState> >* computeFrame(long currentTime);
 };
 

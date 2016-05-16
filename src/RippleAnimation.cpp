@@ -1,6 +1,21 @@
 #include "RippleAnimation.h"
 using namespace std;
 
+RippleAnimation* RippleAnimation::create(
+  long numLines,
+  long numCols,
+  long startTime,
+  long duration
+) {
+  return new RippleAnimation(
+    numLines,
+    numCols,
+    startTime,
+    duration,
+    numCols + 1
+  );
+}
+
 /**
  * First frame: 1st column is off
  * Second frame: 1st column on, 2nd off
@@ -10,34 +25,24 @@ using namespace std;
  * Last frame: last column is on
  */
 vector<vector<PixelState> >* RippleAnimation::computeFrame(long currentTime) {
-  logf("computeFrame");
-  logf("\tcurrentTime: " + to_string(currentTime));
-  float percentThrough = ((float) currentTime - (float) startTime) / duration;
-  logf("\tpercentThrough: " + to_string(percentThrough));
-  if (percentThrough >= 1) {
+  int currentFrame = (currentTime - startTime) / frameDuration;
+  logf("ripple compute frame, currentTime: " + to_string(currentTime));
+  logf("\tcurrentFrame: " + to_string(currentFrame));
+  if (currentFrame > maxFrames) {
     return nullptr;
   }
-  int maxFrames = numCols + 1;
-  logf("\tmaxFrames: " + to_string(maxFrames));
-  long frameDuration = duration / maxFrames;
-  logf("\tframeDuration: " + to_string(frameDuration));
-  int currentFrame = (currentTime - startTime) / frameDuration;
-  logf("\tcurrentFrame: " + to_string(currentFrame));
-  static vector<vector<PixelState> > canvasState (
-    numLines,
-    vector<PixelState> (numCols, IMPARTIAL)
-  );
+  vector<vector<PixelState> >* canvasState = getBlankFrameState();
   // off column
   if ( currentFrame < maxFrames ) {
     for ( int l = 0 ; l < numLines ; l++ ) {
-      canvasState[l][currentFrame] = OFF;
+      canvasState->at(l)[currentFrame] = OFF;
     }
   }
   // on column
   if ( currentFrame >= 1 ) {
     for ( int l = 0 ; l < numLines ; l++ ) {
-      canvasState[l][currentFrame - 1] = ON;
+      canvasState->at(l)[currentFrame - 1] = ON;
     }
   }
-  return &canvasState;
+  return canvasState;
 }

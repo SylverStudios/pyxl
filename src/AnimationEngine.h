@@ -19,10 +19,10 @@
 
 class AnimationEngine
 {
-  int numLines;
-  int numCols;
+  long numLines;
+  long numCols;
   std::vector<std::string> characters;
-  std::vector<int> nonSpaceCoords;
+  std::vector<long> nonSpaceCoords;
   void mainLoop();
 public:
   AnimationEngine(std::vector<std::string> characters);

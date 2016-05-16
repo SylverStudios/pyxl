@@ -5,17 +5,28 @@
 
 class DissolveAnimation : public Animation
 {
-  std::vector<int> nonSpaceCoords;
+  std::vector<long> nonSpaceCoords;
   bool fadeIn; // false -> fade out
 public:
   DissolveAnimation(
-    int numLines,
-    int numCols,
+    long numLines,
+    long numCols,
+    long startTime,
+    long duration,
+    long maxFrames,
+    std::vector<long> nonSpaceCoords,
+    bool fadeIn
+  );
+
+  static DissolveAnimation* create(
+    long numLines,
+    long numCols,
     long startTime,
     long duration,
     std::vector<std::string> characters,
     bool fadeIn
   );
+
   std::vector<std::vector<PixelState> >* computeFrame(long currentTime);
 };
 
