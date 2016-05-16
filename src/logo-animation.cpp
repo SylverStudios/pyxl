@@ -25,6 +25,21 @@ void fileToStringVector(vector<string> * filecontents, string filename) {
 	} else {
 		cout << "Unable to open file";
 	}
+  // rectangularize it with blank space
+  long widestLineWidth = 0;
+  for (int l = 0; l < lines.size(); l++) {
+    if (lines[l].size() > widestLineWidth) {
+      widestLineWidth = lines[l].size();
+    }
+  }
+  logf("widestLineWidth: " + to_string(widestLineWidth));
+  for (int l = 0; l < lines.size(); l++) {
+    string line = lines[l];
+    for (int c = line.size() ; c < widestLineWidth ; c++) {
+      line.append(" ");
+    }
+    logf("line width: " + to_string(line.size()));
+  }
   *filecontents = lines;
 }
 
@@ -42,6 +57,7 @@ int main (int argc, char* argv[])
   // get contents of text file
   vector<string> filecontents;
 	fileToStringVector(&filecontents, filename);
+  logf("\tread file, num lines: " + to_string(filecontents.size()));
 
   // initialize curses screen
 	initscr();

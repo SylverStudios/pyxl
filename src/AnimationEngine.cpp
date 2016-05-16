@@ -13,14 +13,6 @@ AnimationEngine::AnimationEngine(vector<string> characters) {
   this->characters = characters;
   numLines = characters.size();
   numCols = characters.at(0).size(); // FIXME assumes all lines are same length (and 1 exists)
-  for( int l = 0 ; l < numLines ; l++ ) {
-    for( int c = 0 ; c < numCols ; c++ ) {
-      if (characters.at(l).at(c) != ' ') {
-        nonSpaceCoords.push_back(l * numCols + c);
-      }
-    }
-  }
-  random_shuffle(nonSpaceCoords.begin(), nonSpaceCoords.end());
 
   // this->animate_printRandomSpaces();
   this->animate_wave(false);
