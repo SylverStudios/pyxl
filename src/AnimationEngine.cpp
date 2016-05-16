@@ -86,7 +86,7 @@ void AnimationEngine::mainLoop() {
         }
       }
     }
-    wait(100);
+    wait(5);
   }
 };
 

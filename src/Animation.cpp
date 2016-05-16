@@ -10,10 +10,15 @@ vector<vector<PixelState> >* Animation::getBlankFrameState() {
   return &blankState;
 }
 
-vector<long> Animation::getApplicableFrames(long currentFrame) {
-  vector<long> applicableFrames;
+vector<long>* Animation::getApplicableFrames(long currentFrame) {
+  logf("applicable frames");
+  logf("\tcurrentFrame: " + to_string(currentFrame));
+  vector<long>* applicableFrames = new vector<long>;
   for (int f = lastAppliedFrame + 1; f <= currentFrame && f < maxFrames ; f++) {
-    applicableFrames.push_back(f);
+    applicableFrames->push_back(f);
+  }
+  if (applicableFrames->size() == 0 && currentFrame >= maxFrames) {
+    return nullptr;
   }
   lastAppliedFrame = currentFrame;
   return applicableFrames;
@@ -21,13 +26,13 @@ vector<long> Animation::getApplicableFrames(long currentFrame) {
 
 vector<vector<PixelState> >* Animation::computeFrame(long currentTime) {
  long currentFrame = (currentTime - startTime) / frameDuration;
- vector<long> applicableFrames = getApplicableFrames(currentFrame);
- if (applicableFrames.size() == 0) {
+ vector<long>* applicableFrames = getApplicableFrames(currentFrame);
+ if (applicableFrames == nullptr) {
    return nullptr;
  }
  vector<vector<PixelState> >* canvas = getBlankFrameState();
- for (int i = 0; i < applicableFrames.size(); i++) {
-   applyFrame(canvas, applicableFrames[i]);
+ for (int i = 0; i < applicableFrames->size(); i++) {
+   applyFrame(canvas, applicableFrames->at(i));
  }
  return canvas;
 }
