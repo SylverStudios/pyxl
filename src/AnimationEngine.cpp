@@ -86,21 +86,9 @@ void AnimationEngine::mainLoop() {
         }
       }
     }
-    wait(3);
+    wait(100);
   }
 };
-
-void AnimationEngine::animate_printRandomSpaces() {
-  // // loop through non-space coords and print a space there
-  for ( int i = 0 ; i < nonSpaceCoords.size() ; i++ ) {
-    int coord = nonSpaceCoords.at(i);
-    int lineCoord = coord / numCols;
-    int colCoord = coord % numCols;
-    mvaddch(lineCoord, colCoord, ' ');
-    refresh();
-    wait(3);
-  }
-}
 
 void AnimationEngine::animate_wave(bool stayUp) {
   // wave (visible characters are the water) from left to right

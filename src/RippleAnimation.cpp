@@ -16,6 +16,21 @@ RippleAnimation* RippleAnimation::create(
   );
 }
 
+void RippleAnimation::applyFrame(vector<vector<PixelState> >* canvas, long frame) {
+  // off column
+  if ( frame < maxFrames ) {
+    for ( int l = 0 ; l < numLines ; l++ ) {
+      canvas->at(l)[frame] = OFF;
+    }
+  }
+  // on column
+  if ( frame >= 1 ) {
+    for ( int l = 0 ; l < numLines ; l++ ) {
+      canvas->at(l)[frame - 1] = ON;
+    }
+  }
+}
+
 /**
  * First frame: 1st column is off
  * Second frame: 1st column on, 2nd off
@@ -25,24 +40,14 @@ RippleAnimation* RippleAnimation::create(
  * Last frame: last column is on
  */
 vector<vector<PixelState> >* RippleAnimation::computeFrame(long currentTime) {
-  int currentFrame = (currentTime - startTime) / frameDuration;
-  logf("ripple compute frame, currentTime: " + to_string(currentTime));
-  logf("\tcurrentFrame: " + to_string(currentFrame));
-  if (currentFrame > maxFrames) {
+  long currentFrame = (currentTime - startTime) / frameDuration;
+  vector<long> applicableFrames = getApplicableFrames(currentFrame);
+  if (applicableFrames.size() == 0) {
     return nullptr;
   }
-  vector<vector<PixelState> >* canvasState = getBlankFrameState();
-  // off column
-  if ( currentFrame < maxFrames ) {
-    for ( int l = 0 ; l < numLines ; l++ ) {
-      canvasState->at(l)[currentFrame] = OFF;
-    }
+  vector<vector<PixelState> >* canvas = getBlankFrameState();
+  for (int i = 0; i < applicableFrames.size(); i++) {
+    applyFrame(canvas, applicableFrames[i]);
   }
-  // on column
-  if ( currentFrame >= 1 ) {
-    for ( int l = 0 ; l < numLines ; l++ ) {
-      canvasState->at(l)[currentFrame - 1] = ON;
-    }
-  }
-  return canvasState;
+  return canvas;
 }

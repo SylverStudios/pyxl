@@ -43,24 +43,27 @@ DissolveAnimation* DissolveAnimation::create(
   );
 }
 
+void DissolveAnimation::applyFrame(vector<vector<PixelState> >* canvas, long frame) {
+  int coord = nonSpaceCoords.at(frame);
+  int lineCoord = coord / numCols;
+  int colCoord = coord % numCols;
+  canvas->at(lineCoord)[colCoord] = fadeIn ? ON : OFF;
+}
+
 /**
  * Chooses random non-space characters to print / erase
  */
 vector<vector<PixelState> >* DissolveAnimation::computeFrame(long currentTime) {
-  logf("Dissolve::computeFrame");
-  logf("\tcurrentTime: " + to_string(currentTime));
-  int currentFrame = (currentTime - startTime) / frameDuration;
-  if (currentFrame >= maxFrames) {
+  long currentFrame = (currentTime - startTime) / frameDuration;
+  vector<long> applicableFrames = getApplicableFrames(currentFrame);
+  if (applicableFrames.size() == 0) {
     return nullptr;
   }
 
-  vector<vector<PixelState> >* canvasState = getBlankFrameState();
-  // the one new showing pixel
+  vector<vector<PixelState> >* canvas = getBlankFrameState();
+  for (int i = 0; i < applicableFrames.size(); i++) {
+    applyFrame(canvas, applicableFrames[i]);
+  }
 
-  int coord = nonSpaceCoords.at(currentFrame);
-  int lineCoord = coord / numCols;
-  int colCoord = coord % numCols;
-  logf("\tcoordinates: [" + to_string(lineCoord) + ", " + to_string(colCoord) + "]");
-  canvasState->at(lineCoord)[colCoord] = fadeIn ? ON : OFF;
-  return canvasState;
+  return canvas;
 }

@@ -10,6 +10,15 @@ vector<vector<PixelState> >* Animation::getBlankFrameState() {
   return &blankState;
 }
 
+vector<long> Animation::getApplicableFrames(long currentFrame) {
+  vector<long> applicableFrames;
+  for (int f = lastAppliedFrame + 1; f <= currentFrame && f < maxFrames ; f++) {
+    applicableFrames.push_back(f);
+  }
+  lastAppliedFrame = currentFrame;
+  return applicableFrames;
+}
+
 Animation::Animation(
   long numLines,
   long numCols,
@@ -28,4 +37,5 @@ Animation::Animation(
   logf("\tmaxFrames: " + to_string(maxFrames));
   this->frameDuration = this->duration / maxFrames;
   logf("\tframeDuration: " + to_string(frameDuration));
+  this->lastAppliedFrame = -1;
 }

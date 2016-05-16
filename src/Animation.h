@@ -17,6 +17,7 @@ enum PixelState { IMPARTIAL, ON, OFF };
 
 class Animation
 {
+  long lastAppliedFrame;
 protected:
   long numLines;
   long numCols;
@@ -25,7 +26,10 @@ protected:
   long maxFrames;
   long frameDuration;
 
+  std::vector<long> getApplicableFrames(long currentFrame);
+
   std::vector<std::vector<PixelState> >* getBlankFrameState();
+
 public:
   Animation(
     long numLines,
