@@ -18,6 +18,9 @@ enum PixelState { IMPARTIAL, ON, OFF };
 class Animation
 {
   long lastAppliedFrame;
+  std::vector<long> getApplicableFrames(long currentFrame);
+  std::vector<std::vector<PixelState> >* getBlankFrameState();
+
 protected:
   long numLines;
   long numCols;
@@ -26,9 +29,7 @@ protected:
   long maxFrames;
   long frameDuration;
 
-  std::vector<long> getApplicableFrames(long currentFrame);
-
-  std::vector<std::vector<PixelState> >* getBlankFrameState();
+  virtual void applyFrame(std::vector<std::vector<PixelState> >* canvas, long frame) =0;
 
 public:
   Animation(
@@ -38,7 +39,8 @@ public:
     long duration,
     long maxFrames
   );
-  virtual std::vector<std::vector<PixelState> >* computeFrame(long currentTime) =0;
+
+  std::vector<std::vector<PixelState> >* computeFrame(long currentTime);
 };
 
 #endif

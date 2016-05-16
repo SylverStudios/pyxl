@@ -16,6 +16,14 @@ RippleAnimation* RippleAnimation::create(
   );
 }
 
+/**
+ * First frame: 1st column is off
+ * Second frame: 1st column on, 2nd off
+ * Third frame: 2nd column on, 3rd off
+ * ...
+ * Second to last frame: last column is off, 2nd to last column is on
+ * Last frame: last column is on
+ */
 void RippleAnimation::applyFrame(vector<vector<PixelState> >* canvas, long frame) {
   // off column
   if ( frame < maxFrames ) {
@@ -29,25 +37,4 @@ void RippleAnimation::applyFrame(vector<vector<PixelState> >* canvas, long frame
       canvas->at(l)[frame - 1] = ON;
     }
   }
-}
-
-/**
- * First frame: 1st column is off
- * Second frame: 1st column on, 2nd off
- * Third frame: 2nd column on, 3rd off
- * ...
- * Second to last frame: last column is off, 2nd to last column is on
- * Last frame: last column is on
- */
-vector<vector<PixelState> >* RippleAnimation::computeFrame(long currentTime) {
-  long currentFrame = (currentTime - startTime) / frameDuration;
-  vector<long> applicableFrames = getApplicableFrames(currentFrame);
-  if (applicableFrames.size() == 0) {
-    return nullptr;
-  }
-  vector<vector<PixelState> >* canvas = getBlankFrameState();
-  for (int i = 0; i < applicableFrames.size(); i++) {
-    applyFrame(canvas, applicableFrames[i]);
-  }
-  return canvas;
 }

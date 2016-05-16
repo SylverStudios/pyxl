@@ -49,21 +49,3 @@ void DissolveAnimation::applyFrame(vector<vector<PixelState> >* canvas, long fra
   int colCoord = coord % numCols;
   canvas->at(lineCoord)[colCoord] = fadeIn ? ON : OFF;
 }
-
-/**
- * Chooses random non-space characters to print / erase
- */
-vector<vector<PixelState> >* DissolveAnimation::computeFrame(long currentTime) {
-  long currentFrame = (currentTime - startTime) / frameDuration;
-  vector<long> applicableFrames = getApplicableFrames(currentFrame);
-  if (applicableFrames.size() == 0) {
-    return nullptr;
-  }
-
-  vector<vector<PixelState> >* canvas = getBlankFrameState();
-  for (int i = 0; i < applicableFrames.size(); i++) {
-    applyFrame(canvas, applicableFrames[i]);
-  }
-
-  return canvas;
-}

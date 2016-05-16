@@ -7,6 +7,7 @@ class DissolveAnimation : public Animation
 {
   std::vector<long> nonSpaceCoords;
   bool fadeIn; // false -> fade out
+protected:
   void applyFrame(std::vector<std::vector<PixelState> >* canvas, long frame);
 public:
   DissolveAnimation(
@@ -27,8 +28,6 @@ public:
     std::vector<std::string> characters,
     bool fadeIn
   );
-
-  std::vector<std::vector<PixelState> >* computeFrame(long currentTime);
 };
 
 #endif

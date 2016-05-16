@@ -19,6 +19,19 @@ vector<long> Animation::getApplicableFrames(long currentFrame) {
   return applicableFrames;
 }
 
+vector<vector<PixelState> >* Animation::computeFrame(long currentTime) {
+ long currentFrame = (currentTime - startTime) / frameDuration;
+ vector<long> applicableFrames = getApplicableFrames(currentFrame);
+ if (applicableFrames.size() == 0) {
+   return nullptr;
+ }
+ vector<vector<PixelState> >* canvas = getBlankFrameState();
+ for (int i = 0; i < applicableFrames.size(); i++) {
+   applyFrame(canvas, applicableFrames[i]);
+ }
+ return canvas;
+}
+
 Animation::Animation(
   long numLines,
   long numCols,
