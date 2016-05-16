@@ -13,10 +13,10 @@ using namespace std;
 
 #define NEWLINE        "\n"
 
-void fileToStringVector(vector<string> * filecontents) {
+void fileToStringVector(vector<string> * filecontents, string filename) {
   vector<string> lines;
   string line;
-	ifstream myfile ("text/logo.txt");
+	ifstream myfile (filename);
 	if (myfile.is_open()) {
     while(getline(myfile, line)) {
       lines.push_back(line);
@@ -28,12 +28,20 @@ void fileToStringVector(vector<string> * filecontents) {
   *filecontents = lines;
 }
 
-int main ()
+int main (int argc, char* argv[])
 {
   logf("\n\n--------PROGRAM START--------");
+
+  logf("\targc: " + to_string(argc));
+  if (argc != 2) {
+    cout << "Error: must specify a .txt file as command line arg" << endl;
+    return 1;
+  }
+  string filename = argv[1];
+  logf("\targv[1]: " + filename);
   // get contents of text file
   vector<string> filecontents;
-	fileToStringVector(&filecontents);
+	fileToStringVector(&filecontents, filename);
 
   // initialize curses screen
 	initscr();
