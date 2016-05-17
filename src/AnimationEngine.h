@@ -15,6 +15,7 @@
 #include "Animation.h"
 #include "RippleAnimation.h"
 #include "DissolveAnimation.h"
+#include "WaveAnimation.h"
 #include "Logging.h"
 
 class AnimationEngine

@@ -47,6 +47,11 @@ void AnimationEngine::mainLoop() {
           DissolveAnimation::create(numLines, numCols, currentTime, 2000, characters, true)
         );
         break;
+      case 'w': // [w]ave
+        activeAnimations.push_back(
+          WaveAnimation::create(numLines, numCols, currentTime, 1400, numCols)
+        );
+        break;
     }
     // step through each active animation and build a canvas
     vector<vector<PixelState> > canvas (numLines, vector<PixelState>(numCols, IMPARTIAL));
