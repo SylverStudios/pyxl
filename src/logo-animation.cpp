@@ -32,13 +32,12 @@ void fileToStringVector(vector<string> * filecontents, string filename) {
       widestLineWidth = lines[l].size();
     }
   }
-  logf("widestLineWidth: " + to_string(widestLineWidth));
   for (int l = 0; l < lines.size(); l++) {
     string line = lines[l];
     for (int c = line.size() ; c < widestLineWidth ; c++) {
-      line.append(" ");
+      line += " ";
     }
-    logf("line width: " + to_string(line.size()));
+    lines[l] = line;
   }
   *filecontents = lines;
 }
@@ -47,17 +46,14 @@ int main (int argc, char* argv[])
 {
   logf("\n\n--------PROGRAM START--------");
 
-  logf("\targc: " + to_string(argc));
   if (argc != 2) {
     cout << "Error: must specify a .txt file as command line arg" << endl;
     return 1;
   }
   string filename = argv[1];
-  logf("\targv[1]: " + filename);
   // get contents of text file
   vector<string> filecontents;
 	fileToStringVector(&filecontents, filename);
-  logf("\tread file, num lines: " + to_string(filecontents.size()));
 
   // initialize curses screen
 	initscr();
