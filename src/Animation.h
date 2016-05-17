@@ -35,7 +35,6 @@ public:
   Animation(
     long numLines,
     long numCols,
-    long startTime,
     long duration,
     long maxFrames
   );

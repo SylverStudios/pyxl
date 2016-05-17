@@ -35,26 +35,26 @@ void AnimationEngine::mainLoop() {
         shouldExit = true;
         break;
       case 'r': // [r]ipple
-        activeAnimations.push_back(RippleAnimation::create(numLines, numCols, currentTime, 3000));
+        activeAnimations.push_back(RippleAnimation::create(numLines, numCols, 3000));
         break;
       case 'o': // fade [o]ut
         activeAnimations.push_back(
-          DissolveAnimation::create(numLines, numCols, currentTime, 2000, characters, false)
+          DissolveAnimation::create(numLines, numCols, 2000, characters, false)
         );
         break;
       case 'i': // fade [i]n
         activeAnimations.push_back(
-          DissolveAnimation::create(numLines, numCols, currentTime, 2000, characters, true)
+          DissolveAnimation::create(numLines, numCols, 2000, characters, true)
         );
         break;
       case 'w': // [w]ave
         activeAnimations.push_back(
-          WaveAnimation::create(numLines, numCols, currentTime, 1400, numCols, false)
+          WaveAnimation::create(numLines, numCols, 1400, numCols, false)
         );
         break;
       case 'u': // wave, stay [u]p
         activeAnimations.push_back(
-          WaveAnimation::create(numLines, numCols, currentTime, 1400, numCols, true)
+          WaveAnimation::create(numLines, numCols, 1400, numCols, true)
         );
         break;
     }

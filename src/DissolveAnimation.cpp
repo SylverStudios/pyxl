@@ -4,12 +4,11 @@ using namespace std;
 DissolveAnimation::DissolveAnimation(
   long numLines,
   long numCols,
-  long startTime,
   long duration,
   long maxFrames,
   vector<long> nonSpaceCoords,
   bool fadeIn
-): Animation(numLines, numCols, startTime, duration, maxFrames) {
+): Animation(numLines, numCols, duration, maxFrames) {
   this->nonSpaceCoords = nonSpaceCoords;
   this->fadeIn = fadeIn;
 }
@@ -17,7 +16,6 @@ DissolveAnimation::DissolveAnimation(
 DissolveAnimation* DissolveAnimation::create(
   long numLines,
   long numCols,
-  long startTime,
   long duration,
   vector<string> characters,
   bool fadeIn
@@ -34,10 +32,8 @@ DissolveAnimation* DissolveAnimation::create(
   return new DissolveAnimation(
     numLines,
     numCols,
-    startTime,
     duration,
     nonSpaceCoords.size(),
-
     nonSpaceCoords,
     fadeIn
   );

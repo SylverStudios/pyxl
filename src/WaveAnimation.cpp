@@ -4,12 +4,11 @@ using namespace std;
 WaveAnimation::WaveAnimation(
   long numLines,
   long numCols,
-  long startTime,
   long duration,
   long maxFrames,
   long waveWidth,
   long stayUp
-) : Animation(numLines, numCols, startTime, duration, maxFrames){
+) : Animation(numLines, numCols, duration, maxFrames){
   this->waveWidth = waveWidth;
   this->stayUp = stayUp;
 }
@@ -17,7 +16,6 @@ WaveAnimation::WaveAnimation(
 WaveAnimation* WaveAnimation::create(
   long numLines,
   long numCols,
-  long startTime,
   long duration,
   long waveWidth,
   long stayUp
@@ -25,7 +23,6 @@ WaveAnimation* WaveAnimation::create(
   return new WaveAnimation(
     numLines,
     numCols,
-    startTime,
     duration,
     numCols + waveWidth,
     waveWidth,

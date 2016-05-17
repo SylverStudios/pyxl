@@ -13,7 +13,6 @@ public:
   DissolveAnimation(
     long numLines,
     long numCols,
-    long startTime,
     long duration,
     long maxFrames,
     std::vector<long> nonSpaceCoords,
@@ -23,7 +22,6 @@ public:
   static DissolveAnimation* create(
     long numLines,
     long numCols,
-    long startTime,
     long duration,
     std::vector<std::string> characters,
     bool fadeIn

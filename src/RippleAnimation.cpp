@@ -4,13 +4,11 @@ using namespace std;
 RippleAnimation* RippleAnimation::create(
   long numLines,
   long numCols,
-  long startTime,
   long duration
 ) {
   return new RippleAnimation(
     numLines,
     numCols,
-    startTime,
     duration,
     numCols + 1
   );

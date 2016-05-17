@@ -16,7 +16,6 @@ public:
   static WaveAnimation* create(
     long numLines,
     long numCols,
-    long startTime,
     long duration,
     long waveWidth,
     long stayUp
@@ -24,7 +23,6 @@ public:
   WaveAnimation(
     long numLines,
     long numCols,
-    long startTime,
     long duration,
     long maxFrames,
     long waveWidth,
