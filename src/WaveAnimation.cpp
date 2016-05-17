@@ -7,9 +7,11 @@ WaveAnimation::WaveAnimation(
   long startTime,
   long duration,
   long maxFrames,
-  long waveWidth
+  long waveWidth,
+  long stayUp
 ) : Animation(numLines, numCols, startTime, duration, maxFrames){
   this->waveWidth = waveWidth;
+  this->stayUp = stayUp;
 }
 
 WaveAnimation* WaveAnimation::create(
@@ -17,7 +19,8 @@ WaveAnimation* WaveAnimation::create(
   long numCols,
   long startTime,
   long duration,
-  long waveWidth
+  long waveWidth,
+  long stayUp
 ) {
   return new WaveAnimation(
     numLines,
@@ -25,7 +28,8 @@ WaveAnimation* WaveAnimation::create(
     startTime,
     duration,
     numCols + waveWidth,
-    waveWidth
+    waveWidth,
+    stayUp
   );
 }
 
@@ -33,12 +37,15 @@ vector<vector<PixelState> >* WaveAnimation::fullWaveFrame(long frame) {
   // wave (visible characters are the water) from left to right
   vector<vector<PixelState> > * canvas =
     new vector<vector<PixelState> > (numLines, vector<PixelState>(numCols, IMPARTIAL));
-  vector<int> waveColHeights;
+  vector<long> waveColHeights;
   waveColHeights.assign(numCols, 0);
-  int waveBack = frame - waveWidth;
+  long waveBack = frame - waveWidth;
   for ( int c = 0 ; c < waveColHeights.size() ; c++ ) {
+    if (stayUp && c < waveBack + waveWidth / 2) {
+      waveColHeights[c] = numLines;
+    }
     // must be in wave
-    if (frame < c || c < waveBack) {
+    else if (frame < c || c < waveBack) {
       waveColHeights[c] = 0;
     } else {
       int distanceFromBack = c - waveBack;

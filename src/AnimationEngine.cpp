@@ -49,7 +49,12 @@ void AnimationEngine::mainLoop() {
         break;
       case 'w': // [w]ave
         activeAnimations.push_back(
-          WaveAnimation::create(numLines, numCols, currentTime, 1400, numCols)
+          WaveAnimation::create(numLines, numCols, currentTime, 1400, numCols, false)
+        );
+        break;
+      case 'u': // wave, stay [u]p
+        activeAnimations.push_back(
+          WaveAnimation::create(numLines, numCols, currentTime, 1400, numCols, true)
         );
         break;
     }

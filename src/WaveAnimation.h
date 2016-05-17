@@ -8,6 +8,7 @@
 class WaveAnimation : public Animation
 {
   long waveWidth;
+  long stayUp;
   std::vector<std::vector<PixelState> >* fullWaveFrame(long frame);
 protected:
   void applyFrame(std::vector<std::vector<PixelState> >* canvas, long frame);
@@ -17,7 +18,8 @@ public:
     long numCols,
     long startTime,
     long duration,
-    long waveWidth
+    long waveWidth,
+    long stayUp
   );
   WaveAnimation(
     long numLines,
@@ -25,7 +27,8 @@ public:
     long startTime,
     long duration,
     long maxFrames,
-    long waveWidth
+    long waveWidth,
+    long stayUp
   );
 };
 
