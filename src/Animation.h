@@ -17,6 +17,7 @@ enum PixelState { IMPARTIAL, ON, OFF };
 
 class Animation
 {
+  Animation* chainedAnimation;
   long lastAppliedFrame;
   std::vector<long>* getApplicableFrames(long currentFrame);
   std::vector<std::vector<PixelState> >* getBlankFrameState();
@@ -32,6 +33,9 @@ protected:
   virtual void applyFrame(std::vector<std::vector<PixelState> >* canvas, long frame) =0;
 
 public:
+  void chainAnimation(Animation*);
+  Animation* getChainedAnimation();
+
   Animation(
     long numLines,
     long numCols,

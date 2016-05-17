@@ -40,6 +40,14 @@ vector<vector<PixelState> >* Animation::computeFrame(long currentTime) {
   return canvas;
 }
 
+void Animation::chainAnimation(Animation* chainedAnimation) {
+  this->chainedAnimation = chainedAnimation;
+}
+Animation* Animation::getChainedAnimation() {
+
+  return this->chainedAnimation;
+}
+
 Animation::Animation(
   long numLines,
   long numCols,
@@ -56,6 +64,7 @@ Animation::Animation(
   this->frameDuration = this->duration / maxFrames;
   logf("\tframeDuration: " + to_string(frameDuration));
 
+  this->chainedAnimation = nullptr;
   this->startTime = -1;
   this->lastAppliedFrame = -1;
 }

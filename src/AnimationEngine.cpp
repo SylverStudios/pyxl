@@ -9,20 +9,27 @@ void wait ( int milliseconds )
 }
 
 AnimationEngine::AnimationEngine(vector<string> characters) {
-  // initialize values needed for random character printing
   this->characters = characters;
   numLines = characters.size();
   numCols = characters.at(0).size(); // FIXME assumes all lines are same length (and 1 exists)
-
-  // this->animate_printRandomSpaces();
-  this->animate_wave(false);
-  this->animate_wave(true);
-
   this->mainLoop();
 }
 
 void AnimationEngine::mainLoop() {
   vector<Animation*> activeAnimations;
+
+  /**
+   * Initial animations
+   */
+  Animation* initialFadeIn = DissolveAnimation::create(numLines, numCols, 1200, characters, true);
+  Animation* initialFadeOut = DissolveAnimation::create(numLines, numCols, 1200, characters, false);
+  Animation* initialWave = WaveAnimation::create(numLines, numCols, 1400, numCols, false);
+  Animation* secondaryWave = WaveAnimation::create(numLines, numCols, 1400, numCols, true);
+  initialFadeIn->chainAnimation(initialFadeOut);
+  initialFadeOut->chainAnimation(initialWave);
+  initialWave->chainAnimation(secondaryWave);
+  activeAnimations.push_back(initialFadeIn);
+
   bool shouldExit = false;
   while (!shouldExit) {
     long currentTime = clock();
@@ -39,12 +46,12 @@ void AnimationEngine::mainLoop() {
         break;
       case 'o': // fade [o]ut
         activeAnimations.push_back(
-          DissolveAnimation::create(numLines, numCols, 2000, characters, false)
+          DissolveAnimation::create(numLines, numCols, 1200, characters, false)
         );
         break;
       case 'i': // fade [i]n
         activeAnimations.push_back(
-          DissolveAnimation::create(numLines, numCols, 2000, characters, true)
+          DissolveAnimation::create(numLines, numCols, 1200, characters, true)
         );
         break;
       case 'w': // [w]ave
@@ -61,9 +68,15 @@ void AnimationEngine::mainLoop() {
     // step through each active animation and build a canvas
     vector<vector<PixelState> > canvas (numLines, vector<PixelState>(numCols, IMPARTIAL));
     for ( int a = 0; a < activeAnimations.size() ; a++ ) {
-      vector<vector<PixelState> >* animationCanvas = activeAnimations[a]->computeFrame(currentTime);
+      Animation* activeAnimation = activeAnimations[a];
+      vector<vector<PixelState> >* animationCanvas = activeAnimation->computeFrame(currentTime);
       if ( animationCanvas == nullptr ) {
         logf("mainloop, erasing index: " + to_string(a));
+        Animation* chainedAnimation = activeAnimation->getChainedAnimation();
+        if (chainedAnimation != nullptr) {
+          logf("\tchainedAnimation found");
+          activeAnimations.push_back(chainedAnimation);
+        }
         activeAnimations.erase (activeAnimations.begin() + a);
         a--;
         continue;
@@ -91,54 +104,3 @@ void AnimationEngine::mainLoop() {
     wait(5);
   }
 };
-
-void AnimationEngine::animate_wave(bool stayUp) {
-  // wave (visible characters are the water) from left to right
-  vector<int> waveColHeights;
-  waveColHeights.assign(numCols, 0);
-  int waveWidth = numCols; // TODO make this adjustable
-  int currentTick = 0; // front of the wave
-  bool waveFinished = false;
-  float speed = 14;
-  while (!waveFinished) {
-    currentTick++;
-    int waveBack = currentTick - waveWidth;
-    for ( int c = 0 ; c < waveColHeights.size() ; c++ ) {
-      if (stayUp && c < waveBack + waveWidth / 2) {
-        waveColHeights[c] = numLines;
-      }
-      // must be in wave
-      else if (currentTick < c || c < waveBack) {
-        waveColHeights[c] = 0;
-      } else {
-        int distanceFromBack = c - waveBack;
-        int colHeight = sin( (float) distanceFromBack * PI / (float) waveWidth ) * numLines;
-        waveColHeights[c] = colHeight;
-      }
-    }
-    for ( int c = 0 ;  c < waveColHeights.size() ; c++ ) {
-      for ( int l = 0 ; l < numLines ; l++ ) {
-        if ( waveColHeights[c] >= numLines - l ) {
-          mvaddch(l, c, characters.at(l).at(c));
-        } else {
-          mvaddch(l, c, ' ');
-        }
-      }
-    }
-    refresh();
-    speed -= 0.05;
-    wait((int) speed);
-    bool anyColHasHeight = false;
-    bool allColsHaveHeight = true;
-    for ( int c = 0 ; c < waveColHeights.size() ; c++ ) {
-      if (waveColHeights[c] > 0) {
-        anyColHasHeight = true;
-      }
-      if (waveColHeights[c] != numLines) {
-        allColsHaveHeight = false;
-      }
-    }
-    waveFinished = currentTick > waveWidth &&
-     ((!stayUp && !anyColHasHeight) || (stayUp && allColsHaveHeight));
-  }
-}
