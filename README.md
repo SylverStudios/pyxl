@@ -1,5 +1,5 @@
-# LogoAnimation
-Let's make the logo animate in the terminal
+# pyxl
+Interactive animation engine for changing appearance of text files.
 
 ## Setup
 To build the project, you need ncurses available on your machine.  I think you might be able to
@@ -12,4 +12,4 @@ after making, there should be `obj/` and `bin/` directories.
 `bin/` contains the binary executable.
 
 ## How to run
-after building: `bin/sylver path/to/text/file`
+after building: `bin/pyxl path/to/text/file`

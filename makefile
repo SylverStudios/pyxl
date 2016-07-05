@@ -3,12 +3,12 @@
 # ----------------------------------------
 
 # executable name
-TARGET   = sylver
+TARGET   = pyxl
 
 # compilation command - compiles .cpp sources into .o objects
 CC       = g++ -g
 
-# linking command - links .o objects into sylver executable
+# linking command - links .o objects into pyxl executable
 LINKER   = g++ -g -o
 # linking flags
 LFLAGS   = -lncurses
