@@ -6,7 +6,7 @@
 TARGET   = pyxl
 
 # compilation command - compiles .cpp sources into .o objects
-CC       = g++ -g
+CC       = g++ -g -std=c++0x
 
 # linking command - links .o objects into pyxl executable
 LINKER   = g++ -g -o
