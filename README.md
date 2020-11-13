@@ -1,15 +1,37 @@
 # pyxl
-Interactive animation engine for changing appearance of text files.
+A simple project that animates the visibility of characters in a given text file.
+
+## What is it
+Point the `pyxl` binary at any text file to view it using the animation engine. Here we've loaded up `text/logo.txt`:
+
+![Screenshot](https://i.imgur.com/CMArJ5M.png)
+
+Then use the animation commands to animate visibility changes over the text file. This is a screenshot taken halfway through the "wave" command:
+
+![Screenshot](https://i.imgur.com/RPjLQQM.png)
+
+You can perform multiple animations simultaneously which will interact with each other in various ways.
+
+### Commands
+
+Press the highlighted key to initiate the animation.
+
+- [r]ipple
+- fade [o]ut
+- fade [i]n
+- [w]ave
+- wave, stay [u]p
+
+Press q to [q]uit.
 
 ## Setup
-To build the project, you need ncurses available on your machine.  I think you might be able to
-brew install it, but not positive, forgot how I did it.
 
-## How to build
-to create the build artifacts (compiled objects and binary executable): `make`
-after making, there should be `obj/` and `bin/` directories.
-`obj/` contains compiled `.o` files.
-`bin/` contains the binary executable.
+### Install ncurses
+The `ncurses` headers must be available to build this project.
+On Ubuntu, this can be installed with the `libncurses5-dev` package. (`sudo apt install libncurses5-dev`)
 
-## How to run
-after building: `bin/pyxl path/to/text/file`
+### `make`
+Run `make` in the top-level directory. This produces compiled `.o` files in `obj/`, as well as the binary executable in `bin/`.
+
+## Run `bin/pyxl`
+Run `bin/pyxl path/to/text/file` to load up the given text file in the animation engine.
